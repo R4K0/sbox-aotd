@@ -1,22 +1,21 @@
+using AOTD.PlayerRelated;
 using AOTD.UI.Bars;
 using Sandbox;
 using Sandbox.UI;
 
 namespace AOTD.UI
 {
+	[UseTemplate("/UI/StatsContainer.html")]
 	public class StatsContainer : Panel
 	{
-		public StatsContainer() => CreateLayout();
-
-		[Event.Hotload]
-		private void CreateLayout()
+		public Label JobLabel { get; set; }
+		public override void Tick()
 		{
-			DeleteChildren( true );
-			
-			StyleSheet.Load( "UI/StatsContainer.scss" );
+			base.Tick();
 
-			AddChild<Healthbar>();
-			AddChild<Staminabar>();
+			var desiredString = Local.Client?.Pawn is DealPlayer player ? player.GetTeam().ToString() : "Civilian";
+			
+			JobLabel?.SetText( $"💼 {desiredString}" );
 		}
 	}
 }

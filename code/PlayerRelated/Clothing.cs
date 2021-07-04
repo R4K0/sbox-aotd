@@ -1,24 +1,33 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Sandbox;
 
 namespace AOTD.PlayerRelated
 {
-	public struct ClothingItem
+	public partial class ClothingItem : Entity
 	{
-		public ClothingType Type;
-		public string Model;
-		public Color Tint;
+		[Net] public ClothingType Type { get; set; }
+		[Net] public string Model { get; set; }
+		[Net] public Color Tint { get; set; }
+		[Net] public List<TerryBodygroup> HiddenBodygroups { get; set; }
 
-		public List<int> HiddenBodygroups;
-
-		public ClothingItem( ClothingType type, string model, List<int> hiddenBodygroups = null, Color tint = default )
+		public ClothingItem( ClothingType type, string model, Color tint = default, params TerryBodygroup[] hiddenBodygroups )
 		{
 			Type = type;
 			Model = model;
 			Tint = tint;
-			HiddenBodygroups = hiddenBodygroups;
+			HiddenBodygroups = hiddenBodygroups.ToList();
 		}
+	}
+
+	public enum TerryBodygroup
+	{
+		Head,
+		Chest,
+		Legs,
+		Hands,
+		Feet
 	}
 
 	public enum ClothingType
@@ -55,25 +64,60 @@ namespace AOTD.PlayerRelated
 			return GetSlotOfType( type )?.IsPopulated() ?? false;
 		}
 
-		public void Wear( ClothingType type, string model, List<int> HideBodygroups = null )
+		public void Wear( ClothingItem item )
 		{
 			if ( !IsServer )
 				return;
 
-			var slot = GetSlotOfType( type );
+			var slot = GetSlotOfType( item.Type );
 
-			if ( slot is not null )
+			if ( slot is null )
 			{
-				slot.Entity?.Delete();
+				return;
+			}
 
-				var modelEntity = new ModelEntity();
-				modelEntity.SetModel( model );
-				modelEntity.SetParent( Owner, true );
+			slot.Entity?.Delete();
 
-				slot.Entity = modelEntity;
+			var modelEntity = new ModelEntity();
+			modelEntity.SetModel( item.Model );
+			modelEntity.SetParent( Owner, true );
+
+			slot.Entity = modelEntity;
+			slot.Item = item;
+
+			var hideBodygroups = item.HiddenBodygroups;
+			if ( hideBodygroups is not null && Owner is DealPlayer and ModelEntity ownerModel )
+			{
+				foreach (var bodygroupIndex in hideBodygroups)
+				{
+					ownerModel.SetBodyGroup( (int) bodygroupIndex, 1 );
+				}
 			}
 		}
 
+		public void Undress( ClothingType type )
+		{
+			var slotOfType = GetSlotOfType( type );
+
+			if ( slotOfType is null || !slotOfType.IsPopulated() )
+			{
+				return;
+			}
+
+			var hideBodygroups = slotOfType.Item?.HiddenBodygroups;
+
+			if ( hideBodygroups is not null && Owner is DealPlayer and ModelEntity ownerModel  )
+			{
+				foreach (var terryBodygroup in hideBodygroups)
+				{
+					ownerModel.SetBodyGroup( (int) terryBodygroup, 0 );
+				}
+			}
+
+			slotOfType.Entity?.Delete();
+			slotOfType.Item = null;
+		}
+		
 		protected override void OnDestroy()
 		{
 			base.OnDestroy();
@@ -84,12 +128,9 @@ namespace AOTD.PlayerRelated
 
 		public void ClearSlots()
 		{
-			if ( _ClothingSlots != null )
+			foreach (var clothingSlot in this)
 			{
-				foreach ( var clothingSlot in _ClothingSlots )
-				{
-					clothingSlot.Entity?.Delete();
-				}
+				Undress(  clothingSlot.Type );
 			}
 		}
 
@@ -106,12 +147,13 @@ namespace AOTD.PlayerRelated
 
 	public partial class ClothingSlot : Entity
 	{
-		[Net] public ClothingType Type { get; set; }
+		[Net] public ClothingItem Item { get; set; }
 		[Net] public ModelEntity Entity { get; set; }
+		[Net] public ClothingType Type { get; set; } 
 
 		public bool IsPopulated()
 		{
-			return Entity.IsValid();
+			return Item is not null;
 		}
 	}
 }

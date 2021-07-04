@@ -1,4 +1,4 @@
-$rounding: 24px;
+$rounding: 12px;
 
 StatsContainer {
   display: flex;
@@ -23,4 +23,14 @@ StatsContainer {
     width: 100%;
     margin-bottom: 5px;
   }
+}
+
+.team-label {
+  color: white;
+  font-size: 18px;
+  font-family: "Segoe UI", serif;
+  font-weight: 500;
+  text-shadow: 0 0 2px 5px black;
+  text-align: center;
+  margin-bottom: 10px;
 }

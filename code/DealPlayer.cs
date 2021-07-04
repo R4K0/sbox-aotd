@@ -88,7 +88,7 @@ namespace AOTD.PlayerRelated
 			EnableDrawing = false;
 		}
 		
-		[Net] private Team Team { get; set; } = Team.Civilian;
+		[Net] private Team Team { get; set; } = Team.Unemployed;
 		
 		/// <summary>
 		/// Sets the <see cref="AOTD.PlayerRelated.Team"/> of the Player.
