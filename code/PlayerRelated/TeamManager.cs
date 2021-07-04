@@ -12,7 +12,7 @@ namespace AOTD.PlayerRelated
 	/// </summary>
 	public enum Team
 	{
-		Civilian,
+		Unemployed,
 		Rednikov,
 		MonogoIndurstries
 	}
@@ -46,11 +46,11 @@ namespace AOTD.PlayerRelated
 			var smartTrousers =
 				new ClothingItem( ClothingType.Legs, "models/citizen_clothes/trousers/trousers.smart.vmdl" );
 
-			AddTeamClothing( Team.Civilian,
+			AddTeamClothing( Team.Unemployed,
 				new[]
 				{
 					new ClothingItem( ClothingType.Legs, "models/citizen_clothes/trousers/trousers.jeans.vmdl" ),
-					new ClothingItem( ClothingType.Chest, "models/citizen_clothes/jacket/jacket.red.vmdl" ),
+					new ClothingItem( ClothingType.Chest, "models/citizen_clothes/jacket/jacket.red.vmdl", Color.White, TerryBodygroup.Chest ),
 					new ClothingItem( ClothingType.Feet, "models/citizen_clothes/shoes/shoes_securityboots.vmdl" ),
 					new ClothingItem( ClothingType.Head, "models/citizen_clothes/hat/hat_woolly.vmdl" )
 				} );
@@ -93,7 +93,7 @@ namespace AOTD.PlayerRelated
 			player.Clothes.ClearSlots();
 			foreach ( var clothingItem in clothingItems )
 			{
-				player.Clothes.Wear( clothingItem.Type, clothingItem.Model );
+				player.Clothes.Wear( clothingItem );
 			}
 		}
 
