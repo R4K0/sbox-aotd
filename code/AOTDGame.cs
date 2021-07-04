@@ -21,7 +21,6 @@ namespace AOTD
 	/// Your game needs to be registered (using [Library] here) with the same name 
 	/// as your game addon. If it isn't then we won't be able to find it.
 	/// </summary>
-	[Library( "AOTDGame" )]
 	public partial class AOTDGame : Sandbox.Game
 	{
 		public static AOTDGame GetGame()
