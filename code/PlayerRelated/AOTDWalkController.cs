@@ -16,10 +16,9 @@ namespace AOTD.PlayerRelated
 			var ws = Duck.GetWishSpeed();
 			if ( ws >= 0 ) return ws;
 
-			if ( Input.Down( InputButton.Run ) && CanSprint() )
+			if ( IsSprinting )
 				return DefaultSpeed;
 			
-
 			return WalkSpeed;
 		}
 
@@ -47,7 +46,7 @@ namespace AOTD.PlayerRelated
 
 			if ( (!Input.Down(InputButton.Run) || !CanSprint()) && ExhaustionTime >= 2f )
 			{
-				if ( 100f != Stamina )
+				if ( 99f >= Stamina )
 				{				
 					Stamina = MathF.Min(100f, Stamina + 3.5f * Time.Delta);
 				}

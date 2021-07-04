@@ -3,8 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AOTD.PlayerRelated;
+using AOTD.PlayerRelated;
 
-namespace AOTD
+namespace AOTD.PlayerRelated
 {
 	public partial class DealPlayer : Player
 	{
@@ -23,14 +24,14 @@ namespace AOTD
 			
 			Clothes.SetupSlots();
 			
-			Clothes.Wear( ClothingType.Legs, "models/citizen_clothes/trousers/trousers.smart.vmdl" );
+			TeamManager.Singleton.ApplyTeamClothingToPlayer( this );
 			
 			//
 			// Use WalkController for movement (you can make your own PlayerController for 100% control)
 			//
 			Controller = new AOTDWalkController()
 			{
-				WalkSpeed = 65f
+				WalkSpeed = 55f
 			};
 
 			//
@@ -85,6 +86,33 @@ namespace AOTD
 			base.OnKilled();
 
 			EnableDrawing = false;
+		}
+		
+		[Net] private Team Team { get; set; } = Team.Civilian;
+		
+		/// <summary>
+		/// Sets the <see cref="AOTD.PlayerRelated.Team"/> of the Player.
+		/// Team is automatically networked.
+		/// </summary>
+		/// <param name="team">Which team to set the player to</param>
+		/// <param name="applyClothing">Should we reapply their clothing?</param>
+		public void SetTeam( Team team, bool applyClothing = false )
+		{
+			Team = team;
+
+			if ( applyClothing )
+			{
+				TeamManager.Singleton?.ApplyTeamClothingToPlayer( this );
+			}
+		}
+
+		/// <summary>
+		/// Gets the team.
+		/// </summary>
+		/// <returns>The <see cref="AOTD.PlayerRelated.Team"/>.</returns>
+		public Team GetTeam()
+		{
+			return Team;
 		}
 	}
 }

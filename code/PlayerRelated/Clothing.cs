@@ -1,8 +1,8 @@
-using System;
+using System.Collections;
 using System.Collections.Generic;
 using Sandbox;
 
-namespace AOTD
+namespace AOTD.PlayerRelated
 {
 	public enum ClothingType
 	{
@@ -12,7 +12,7 @@ namespace AOTD
 		Feet
 	}
 
-	public partial class ClothingManager : Entity
+	public partial class ClothingManager : Entity, IEnumerable<ClothingSlot>
 	{
 		[Net] public IList<ClothingSlot> _ClothingSlots { get; set; }
 		public List<ClothingSlot> ClothingSlots => ( List<ClothingSlot> ) _ClothingSlots;
@@ -64,13 +64,28 @@ namespace AOTD
 			base.OnDestroy();
 		
 			Log.Info( "Cleaning up a Clothing Manager!" );
-			if ( _ClothingSlots != null )
+			ClearSlots();
+		}
+
+		public void ClearSlots()
+		{
+			if (_ClothingSlots != null)
 			{
-				foreach ( var clothingSlot in _ClothingSlots )
+				foreach (var clothingSlot in _ClothingSlots)
 				{
 					clothingSlot.Entity?.Delete();
 				}
 			}
+		}
+
+		public IEnumerator<ClothingSlot> GetEnumerator()
+		{
+			return _ClothingSlots.GetEnumerator();
+		}
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return _ClothingSlots.GetEnumerator();
 		}
 	}
 	
