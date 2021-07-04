@@ -1,0 +1,35 @@
+$radius: 8px;
+
+
+.ValueBar {
+  overflow: hidden;
+  width: 100%;
+  min-height: 24px;
+  border-radius: $radius;
+
+  background-color: #0F131A;
+  box-shadow: 0 0 10px 3px black;
+
+  Label {
+    display: flex;
+    width: 100%;
+    
+    align-self: center;
+    align-items: center;
+    text-align: center;
+    
+    color: white;
+    font-family: "Courier New", sans-serif;
+    font-weight: bold;
+    text-shadow: 0 0 2px 5px black;
+  }
+
+  .Forebar {
+    position: absolute;
+    border-radius: $radius;
+    
+    width: 100%;
+    height: 100%;
+  }
+}
+
