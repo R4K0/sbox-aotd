@@ -17,20 +17,6 @@ namespace AOTD.PlayerRelated
 		MonogoIndurstries
 	}
 
-	public struct ClothingItem
-	{
-		public ClothingType Type;
-		public string Model;
-		public Color Tint;
-
-		public ClothingItem( ClothingType type, string model, Color tint = default )
-		{
-			Type = type;
-			Model = model;
-			Tint = tint;
-		}
-	}
-
 	public class TeamManager : Entity
 	{
 		public static TeamManager Singleton;
@@ -69,9 +55,15 @@ namespace AOTD.PlayerRelated
 					new ClothingItem( ClothingType.Head, "models/citizen_clothes/hat/hat_woolly.vmdl" )
 				} );
 
-			AddTeamClothing( Team.MonogoIndurstries, new[] {smartTrousers} );
+			AddTeamClothing( Team.MonogoIndurstries, new[]
+			{
+				smartTrousers
+			} );
 
-			AddTeamClothing( Team.Rednikov, new[] {smartTrousers} );
+			AddTeamClothing( Team.Rednikov, new[]
+			{
+				smartTrousers
+			} );
 		}
 
 		/// <summary>
