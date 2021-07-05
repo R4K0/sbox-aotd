@@ -10,7 +10,7 @@ namespace AOTD.UI.Bars
 
 		public override void UpdateLayout()
 		{
-			if ( !(Local.Client?.Pawn as DealPlayer)?.CanSprint() ?? false )
+			if ( !DealPlayer.LocalPlayer?.CanSprint() ?? false )
 			{
 				Forebar.Style.BackgroundColor = Color.Gray;
 			}
