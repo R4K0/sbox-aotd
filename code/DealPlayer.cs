@@ -11,6 +11,9 @@ namespace AOTD.PlayerRelated
 	{
 		[Net]
 		public ClothingManager Clothes { get; set; }
+		
+		public static DealPlayer LocalPlayer => Local.Pawn as DealPlayer;
+		
 		public override void Respawn()
 		{
 			SetModel( "models/citizen/citizen.vmdl" );
