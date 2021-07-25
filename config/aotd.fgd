@@ -1,0 +1,16 @@
+// 
+// aotd.System.Spawnpoint : Sandbox.Entity 
+// 
+@PointClass editormodel( "models/editor/playerstart.vmdl" ) = aotd_spawnpoint : "This is where your players will spawn"
+[
+	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
+	parentname(target_destination) [ group="Hierarchy" ] : "Parent" : : "The name of this entity's parent in the movement hierarchy. Entities with parents move with their parent."
+	owningteam(choices) : "Team Ownership" : 0 : "Which team does this spawn point belong to?" = [
+		0 : "Unemployed"
+		1 : "Rednikov"
+		2 : "Monogo Indurstries"
+	]
+	priority(integer) : "Priority" : 1 : "The priority in which the spawn points are going to be used. If one is obstructed, then the next one will be tested."
+	enable_shadows(boolean) [ group="Render Properties" ] : "Shadow Casting" : 1 : "Whether this entity should cast shadows or not"
+]
+
