@@ -3,8 +3,10 @@ using Sandbox;
 using Sandbox.UI.Construct;
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using AOTD.PlayerRelated;
+using aotd.System;
 
 //
 // You don't need to put things in a namespace, but it doesn't hurt.
@@ -58,6 +60,32 @@ namespace AOTD
 			client.Pawn = player;
 
 			player.Respawn();
+		}
+
+		public override void MoveToSpawnpoint( Entity pawn )
+		{
+			// If pawn is a DealPlayer, proceed with custom logic
+			if ( pawn is DealPlayer player )
+			{
+				var sorted = Spawnpoint.Spawnpoints.OrderBy( spawnpoint => spawnpoint.Priority )
+					.Where( spawnpoint => spawnpoint.OwningTeam == player.GetTeam() )
+					.ToList();
+				
+				// Tries to find the first unobstructed spawn point, if it can't find it - it'll pick the spawn by priority.
+				var found = sorted.FirstOrDefault( spawnpoint => !spawnpoint.IsObstructed( player ) ) ?? sorted.FirstOrDefault();
+
+				if ( found is not null )
+				{
+					player.Transform = found.Transform;
+					found.PostSpawn( pawn );
+
+					// If the spawn was found, then don't proceed to default behavior.
+					return;
+				}
+			}
+			
+			// If not found or pawn is not a DealPlayer, proceed with default behavior
+			base.MoveToSpawnpoint( pawn );
 		}
 	}
 
