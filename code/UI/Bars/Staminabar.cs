@@ -5,7 +5,7 @@ namespace AOTD.UI.Bars
 {
 	public partial class Staminabar : Basebar
 	{
-		public override float UpdateValue => (Local.Client?.Pawn as DealPlayer)?.GetStamina() / 100 ?? 0f;
+		public override float UpdateValue => DealPlayer.LocalPlayer?.GetStamina() / 100 ?? 0f;
 		public override Color BarColor => Color.Orange;
 
 		public override void UpdateLayout()

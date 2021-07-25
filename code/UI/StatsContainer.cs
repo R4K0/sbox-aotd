@@ -13,7 +13,7 @@ namespace AOTD.UI
 		{
 			base.Tick();
 
-			var desiredString = Local.Client?.Pawn is DealPlayer player ? player.GetTeam().ToString() : "Civilian";
+			var desiredString = Local.Client?.Pawn is DealPlayer player ? player.GetTeam().ToString() : "Error";
 			
 			JobLabel?.SetText( $"💼 {desiredString}" );
 		}
